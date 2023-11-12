@@ -1,0 +1,185 @@
+﻿@{
+    Layout = null;
+}
+@using System.Text.Json;
+@using Assignment.Repository;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var account = HttpContextAccessor.HttpContext.Session.GetJson<Account>("account");
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+
+    <!-- Bootstrap CSS -->
+    <link href="~/cssProduct/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="~/cssProduct/tiny-slider.css" rel="stylesheet">
+    <link href="~/cssProduct/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS cho bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f2f2f2;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* CSS cho dòng tiêu đề cột */
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        /* Hiệu ứng khi di chuột qua dòng */
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Đường kẻ xen kẽ cho các dòng */
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Tùy chỉnh các ô theo cột */
+        td.my-custom-column {
+            font-weight: bold;
+            width: 200px;
+            text-align: center;
+        }
+
+        #firstDiv {
+            width: 300px;
+            height: 170px;
+            background-color: #ffb6c1;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #secondDiv {
+            width: 700px;
+            height: 170px;
+            background-color: #46b4ff;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body style="background-color: #c3efde">
+
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Lson<span>.</span></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsFurni">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    <li class="active"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li><a class="nav-link" href="about.html">About us</a></li>
+                </ul>
+                <div style="margin-left: 15px">
+                    <form action="/Login/Index">
+                        <button style="border: none; background-color: transparent"><i style="font-size: 30px; color: white" class="fa-solid fa-right-from-bracket"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <section class="h-100 h-custom" style="background-color: #c3efde;">
+
+            <div class="container py-5 h-100">
+                <div style="display: flex; justify-content: space-between">
+                    <div>
+                        <form action="/Employee/ShowOrders">
+                            <button style="color: black">Back</button>
+                        </form>
+                    </div>
+                    <div>
+                        <form action="/Employee/ShowOrdersApproved">
+                            <button style="color: black">Order Management</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-12" style="padding-bottom: 50px; display: flex; justify-content: space-around">
+                    <div id="firstDiv">
+                        <span style="font-size: 60px; color: #825b61; font-family: Comic Sans MS, Comic Sans, cursive; ">@ViewBag.allCreatedOrder</span>
+                        <span style="color: #52373c; font-weight: bold; margin-left: 10px">Created orders</span>
+                    </div>
+                    <div id="secondDiv">
+                        <span style="font-size: 60px; color: #235a7f; font-family: Comic Sans MS, Comic Sans, cursive; ">@ViewBag.revenue</span>
+                        <span style="color: #19415c; font-weight: bold; margin-left: 10px">Revenue</span>
+                    </div>
+                </div>
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    
+    <script>
+        const ctx = document.getElementById('myChart');
+        const list = @Html.Raw(Json.Serialize(ViewBag.listStatistic));
+
+        const labels = [];
+        const data = [];
+
+        for (let i = 0; i < list.length; i++) {
+            labels.push(list[i].productName);
+            data.push(list[i].totalQuantity);
+            console.log(list[i].productName);
+            console.log(list[i].totalQuantity);
+        }
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Quantity sold',
+                        data: data,
+                        fill: false,
+                        borderColor: 'rgb(77, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+        console.log(labels);
+        console.log(data);
+    </script>
+
+
+
+    <script src="~/jsProduct/bootstrap.bundle.min.js"></script>
+    <script src="~/jsProduct/tiny-slider.js"></script>
+    <script src="~/jsProduct/custom.js"></script>
+</body>
+
+</html>

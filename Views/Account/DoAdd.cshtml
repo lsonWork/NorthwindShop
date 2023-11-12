@@ -1,0 +1,99 @@
+﻿<body>
+    <div style="display: flex; justify-content: space-evenly">
+        <div>
+            <h4 style="margin-bottom: 10px">Assign Customer</h4>
+            <form action="~/Account/AddCustomer" method="get">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Username:
+                            </td>
+                            <td>
+                                <input type="text" name="usernameCustomer" value="@(ViewBag.usernameEnterC != null ? ViewBag.usernameEnterC : "")" required />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Password:
+                            </td>
+                            <td>
+                                <input type="password" name="passwordCustomer" value="@(ViewBag.passwordEnterC != null ? ViewBag.passwordEnterC : "")" required />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                CustomerID:
+                            </td>
+                            <td>
+                                <select name="customerID">
+                                    @foreach (string id in ViewBag.listCustomerID)
+                                    {
+                                        <option value="@id">@id</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <span style="color: red; margin: 10px 0 10px 0">@(ViewBag.msgUsernameC != null ? ViewBag.msgUsernameC : "")</span>
+                            <td style="float: right; margin-top: 10px">
+                                <button>Create +</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div>
+            <h4 style="margin-bottom: 10px">Assign Employees</h4>
+            <form action="/Account/AddEmployee" method="post">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Username:
+                            </td>
+                            <td>
+                                <input type="text" name="usernameEmployee" value="@(ViewBag.usernameEnterE != null ? ViewBag.usernameEnterE : "")" required />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Password:
+                            </td>
+                            <td>
+                                <input type="password" name="passwordEmployee" value="@(ViewBag.passwordEnterE != null ? ViewBag.passwordEnterE : "")" required />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                EmployeeID:
+                            </td>
+                            <td>
+                                <select name="employeeID">
+                                    @foreach (int id in ViewBag.listEmployeeID)
+                                    {
+                                        <option value="@id">@id</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <span style="color: red; margin: 10px 0 10px 0">@(ViewBag.msgUsernameE != null ? ViewBag.msgUsernameE : "")</span>
+                            <td style="float: right; margin-top: 10px">
+                                <button>Create +</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div style="width: 5%; margin: 0 auto; margin-top: 25px"><a href="/Account/ListAccount" style="text-decoration: none; font-size: 20px; font-weight: bold">Back</a></div>
+</body>
+
+
+
+

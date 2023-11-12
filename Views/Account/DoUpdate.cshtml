@@ -1,0 +1,29 @@
+﻿<div>
+    <form action="/Account/Update" method="post">
+        <table>
+            <tbody>
+
+                <tr>
+                    <td>Username: </td>
+                    <td>
+                        <input type="text" readonly value="@ViewBag.oldInfo.Username"/>
+                        <input type="hidden" value="@(ViewBag.oldInfo.CustomerId == null ? ViewBag.oldInfo.EmployeeId : ViewBag.oldInfo.CustomerId)" name="idUpdate"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password: </td>
+                    <td>
+                        <input type="password" value="@ViewBag.oldInfo.Password" name="newPass" required></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button style="float: right">Update</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="width: 5%; margin-top: 25px"><a href="/Account/ListAccount" style="text-decoration: none; font-size: 20px; font-weight: bold">Back</a></div>
+    </form>
+</div>

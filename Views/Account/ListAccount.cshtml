@@ -1,0 +1,78 @@
+﻿@using Assignment.Models
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #333;
+        color: white;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<body>
+    <div style="float: right; margin-bottom: 10px">
+        <form action="/Account/DoAdd">
+            <button><i style="border: none; font-size: 20px" class="fa-solid fa-user-plus"></i></button>
+        </form>
+    </div>
+    <table border="1">
+        <thead style="background-color: #C7CEEA">
+            <tr>
+                <td style="font-weight: bold; font-size: 20px">UserID</td>
+                <td style="font-weight: bold; font-size: 20px">Username</td>
+                <td style="font-weight: bold; font-size: 20px">Password</td>
+                <td style="font-weight: bold; font-size: 20px">Role</td>
+                <td style="font-weight: bold; font-size: 20px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewBag.listAccount.Count != 1)
+            {
+                foreach (Account a in @ViewBag.listAccount)
+                {
+                    if (a.Role != 1)
+                    {
+                        <tr>
+                            <td>@(a.CustomerId != null ? @a.CustomerId : @a.EmployeeId)</td>
+                            <td>@a.Username</td>
+                            <td>@a.Password</td>
+                            <td>@(a.Role == 2 ? "Customer" : "Employee")</td>
+                            <td>
+                                <div style="display: flex">
+                                    <form action="/Account/DoUpdate" method="post">
+                                        <input type="hidden" value="@(a.CustomerId != null ? @a.CustomerId : @a.EmployeeId)" name="idUpdate" />
+                                        <button type="submit"><i class="fa-solid fa-pen"></i></button>
+                                    </form>
+                                    <form action="/Account/Delete" method="post">
+                                        <button type="submit"><i class="fa-solid fa-xmark"></i></button>
+                                        <input type="hidden" value="@(a.CustomerId != null ? @a.CustomerId : @a.EmployeeId)" name="idDelete"></input>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>No information</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+

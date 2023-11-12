@@ -1,0 +1,141 @@
+﻿@{
+    Layout = null;
+}
+@using System.Text.Json;
+@using Assignment.Repository;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+
+    <!-- Bootstrap CSS -->
+    <link href="~/cssProduct/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="~/cssProduct/tiny-slider.css" rel="stylesheet">
+    <link href="~/cssProduct/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* CSS cho bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f2f2f2;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* CSS cho dòng tiêu đề cột */
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        /* Hiệu ứng khi di chuột qua dòng */
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Đường kẻ xen kẽ cho các dòng */
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Tùy chỉnh các ô theo cột */
+        td.my-custom-column {
+            font-weight: bold;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body style="background-color: #c3efde">
+
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Lson<span>.</span></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsFurni">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    <li class="active"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li><a class="nav-link" href="about.html">About us</a></li>
+                </ul>
+                <div style="margin-left: 15px">
+                    <form action="/Login/Index">
+                        <button style="border: none; background-color: transparent"><i style="font-size: 30px; color: white" class="fa-solid fa-right-from-bracket"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <h3 style="width: 18%; margin: 0 auto">All approved orders</h3>
+    <div style="display: flex; float: right; justify-content: space-around; width: 15%">
+        <form action="/Employee/ViewStatistic">
+            <button>Back</button>
+        </form>
+    </div>
+    <div style="margin-top: 30px">
+        <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>OrderID</th>
+                    <th>CustomerID</th>
+                    <th>Username</th>
+                    <th>ShipName</th>
+                    <th>ShipAddress</th>
+                    <th>OrderDate</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            @{
+                int count = 0;
+            }
+            <tbody>
+                @if (ViewBag.listApproved.Count == 0)
+                {
+                <td>No order</td>
+                }
+                else
+                {
+                    @foreach (var o in ViewBag.listApproved)
+                    {
+                    <tr class="trT">
+                        <td>@(++count)</td>
+                        <td>@o.OrderId</td>
+                        <td>@o.CustomerId</td>
+                        <td>@o.Username</td>
+                        <td>@o.ShipName</td>
+                        <td>@o.ShipAddress</td>
+                        <td>@(o.OrderDate == null ? "Unidentify" : o.OrderDate)</td>
+                        <td id="status">@(o.Status == 0 ? "Processing..." : "Approved!")</td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <script src="~/jsProduct/bootstrap.bundle.min.js"></script>
+    <script src="~/jsProduct/tiny-slider.js"></script>
+    <script src="~/jsProduct/custom.js"></script>
+</body>
+
+</html>
